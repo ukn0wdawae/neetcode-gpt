@@ -8,10 +8,6 @@ class Solution:
         # z is a 1D NumPy array of logits
         # Hint: subtract max(z) for numerical stability before computing exp
         # return np.round(your_answer, 4)
-        shifted_x = z - np.max(z)
-    
-        # Take e^ for the shifted elements
-        exps = np.exp(shifted_x)
-        
-        # Divide by the sum of exponentials
-        return np.round(exps / np.sum(exps), 4)
+        shifted = z - np.max(z)
+        exps = np.exp(shifted)
+        return np.round(exps/np.sum(exps),4)
