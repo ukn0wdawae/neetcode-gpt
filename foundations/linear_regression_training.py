@@ -3,6 +3,7 @@ from numpy.typing import NDArray
 
 
 class Solution:
+    #derivative of mse
     def get_derivative(self, model_prediction: NDArray[np.float64], ground_truth: NDArray[np.float64], N: int, X: NDArray[np.float64], desired_weight: int) -> float:
         # note that N is just len(X)
         return -2 * np.dot(ground_truth - model_prediction, X[:, desired_weight]) / N
@@ -24,22 +25,11 @@ class Solution:
         #   2. For each weight index j, compute gradient with get_derivative()
         #   3. Update: weights[j] -= learning_rate * gradient
         # Return np.round(final_weights, 5)
-        weights = np.copy(initial_weights)
-        N = len(X)
-
-        for _ in range(num_iterations):
-            # 1. Compute predictions for the current iteration
-            predictions = self.get_model_prediction(X, weights)
-
-            # Temporary array to hold gradients for all weights
-            gradients = np.zeros_like(weights)
-
-            # 2. For each weight index j, compute gradient
+        weights = np.array(initial_weights,dtype=np.float64)
+        for i in range(num_iterations):
+            predictions = self.get_model_prediction(X,weights)
             for j in range(len(weights)):
-                gradients[j] = self.get_derivative(predictions, Y, N, X, j)
-
-            # 3. Update weights
-            weights -= self.learning_rate * gradients
-        
+                gradient = self.get_derivative(predictions,Y,len(X),X,j)
+                weights[j] -= self.learning_rate * gradient
         return np.round(weights,5)
 
